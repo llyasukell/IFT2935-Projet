@@ -1,7 +1,5 @@
-
 CREATE TYPE etat_produit AS ENUM ('neuf', 'usage', 'abime');
 CREATE TYPE etat_decision AS ENUM ('en_attente', 'valide', 'rejete');
-
 
 CREATE TABLE Utilisateur (
     id SERIAL PRIMARY KEY,
@@ -23,15 +21,14 @@ CREATE TABLE Expert (
     id_utilisateur INTEGER PRIMARY KEY REFERENCES Utilisateur(id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE Produit (
     id_produit SERIAL PRIMARY KEY,
     nom_produit VARCHAR(255) NOT NULL,
     etat etat_produit,
     description TEXT,
-    prix_souhaite DECIMAL(12, 2) NOT NULL
+    prix_souhaite DECIMAL(12, 2) NOT NULL,
+    id_annonceur INTEGER NOT NULL REFERENCES Annonceur(id_utilisateur)
 );
-
 
 CREATE TABLE Offre (
     id_offre SERIAL PRIMARY KEY,
@@ -39,15 +36,13 @@ CREATE TABLE Offre (
     id_produit INTEGER NOT NULL REFERENCES Produit(id_produit) ON DELETE CASCADE
 );
 
-
 CREATE TABLE Estimation (
     id_estimation SERIAL PRIMARY KEY,
     prix_estimation DECIMAL(12, 2) NOT NULL,
-    ville VARCHAR(255),
     id_expert INTEGER NOT NULL REFERENCES Expert(id_utilisateur),
-    id_produit INTEGER NOT NULL REFERENCES Produit(id_produit)
+    id_produit INTEGER NOT NULL REFERENCES Produit(id_produit),
+    date_estimation DATE DEFAULT CURRENT_DATE
 );
-
 
 CREATE TABLE Valide (
     id_annonceur INTEGER,
