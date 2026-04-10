@@ -1,0 +1,5 @@
+-- ? = id
+BEGIN TRANSACTION;
+SELECT * FROM Produit
+WHERE id_produit = ?;
+END TRANSACTION;

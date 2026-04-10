@@ -1,6 +1,8 @@
-begin transaction;
--- Utiliser "set min_price" et "set max_price" pour définir les variables dans postgresql... je crois?
-SELECT * FROM Produit
-WHERE prix_souhaite BETWEEN :'min_price' AND :'max_price';
+-- ? = min_price
+-- ? = max_price
 
-end transaction;
+BEGIN TRANSACTION;
+SELECT * FROM Produit
+WHERE prix_souhaite BETWEEN ? AND ?;
+
+END TRANSACTION;
