@@ -1,0 +1,8 @@
+db.properties
+out/
+*.jar
+!lib/*.jar
+.DS_Store
+.idea/
+.vscode/
+*.class
