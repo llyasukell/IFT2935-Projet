@@ -1,0 +1,518 @@
+\documentclass{article}
+\usepackage[a4paper,margin=2cm]{geometry} % <-- ajuste ici si tu veux plus de marge
+\usepackage[french]{babel}
+\addto\captionsfrench{\def\tablename{Tableau}}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{subfig}
+\usepackage{cancel}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{pifont}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\renewcommand\CancelColor{\color{red}}
+\usepackage[dvipsnames]{xcolor}
+\newcommand{\abs}[1]{\lvert #1 \rvert}
+\newcommand{\tg}[1]{\textcolor{Green}{\quad\longleftarrow\text{#1}}}
+\newcommand{\defn}[1]{\textcolor{Mulberry}{#1}}
+\usepackage{graphicx}
+\theoremstyle{plain}
+\newtheorem{theorem}{Théorème}
+\theoremstyle{definition}
+\newtheorem{definition}{D\'{e}finition}
+\newtheorem*{notation}{Notation}
+\newtheorem{example}{Exemple}
+\newtheorem*{property}{Propriété}
+\newtheorem*{exercise}{Exercice}
+\newtheorem*{remark}{Remarque}
+\newtheorem*{note}{Note}
+\newcounter{quCounter}
+\newcommand\showQuCounter{\stepcounter{quCounter}\arabic{quCounter}}
+\newcommand{\qu}{\paragraph{} \textbf{Question \showQuCounter : }}
+
+
+\usepackage[normalem]{ulem} % pour \uline (soulignement)
+\newcommand{\pk}[1]{\uline{#1}} % clé primaire soulignée
+\newcommand{\fk}[1]{\#\uline{#1}} % clé étrangère + soulignée si elle est dans la PK
+\newcommand{\fka}[1]{\##1} % clé étrangère (pas dans la PK)
+
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\fancypagestyle{plain}{
+  \fancyhead[R]{\textbf{Hiver 2026}}
+  \fancyhead[L]{\textbf{IFT 2935}}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+\title{\textbf{Gestion d'un système de vente conditionnelle} \\
+\large \textbf{Base de données}}
+\author{Mamour Ndiaye XXXXXXXX, Jacob Déry XXXXXXXX, Yasin Patel XXXXXXXX, \\ Pierre Emery 20278920}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{plain}
+
+\noindent\makebox[\linewidth]{\rule{\linewidth}{0.6pt}}
+
+\section*{Représentation Entité-Association de la base relationnelle}
+
+\subsection*{Modèle E-A}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{modele_ea.png}
+    \caption{Modèle Entité-Association — Système de vente conditionnelle}
+    \label{fig:modele_ea}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{legende_cardinalite.png}
+    \caption{Légende des cardinalités}
+    \label{fig:legende}
+\end{figure}
+
+\subsection*{Justification des éléments du modèle}
+
+\subsubsection*{1. Entité \texttt{UTILISATEUR}}
+\begin{itemize}
+    \item \underline{id} (clé primaire artificielle : évite les doublons sur courriel ou nom)
+    \item \texttt{nom\_complet} (attribut composé de \texttt{nom} et \texttt{prenom} : identification complète de la personne)
+    \item \texttt{courriel} (identifiant unique de connexion)
+    \item \texttt{mot\_de\_passe} (justification : authentification au système)
+\end{itemize}
+Les entités \texttt{ACHETEUR}, \texttt{ANNONCEUR} et \texttt{EXPERT} héritent de \texttt{UTILISATEUR} par
+spécialisation (flèches d'héritage dans le diagramme), ce qui évite de dupliquer les attributs
+communs dans chaque sous-entité.
+
+\subsubsection*{2. Entité \texttt{ACHETEUR}}
+\begin{itemize}
+    \item Spécialisation de \texttt{UTILISATEUR} (justification : un acheteur partage les attributs
+    de base d'un utilisateur mais est le seul à pouvoir soumettre des offres via l'association
+    \texttt{propose})
+    \item Aucun attribut supplémentaire dans notre modèle simplifié : toutes les informations
+    pertinentes de l'acheteur sont portées par ses offres.
+\end{itemize}
+
+\subsubsection*{3. Entité \texttt{ANNONCEUR}}
+\begin{itemize}
+    \item Spécialisation de \texttt{UTILISATEUR} (justification : seul l'annonceur peut soumettre
+    des produits et prendre une décision sur une estimation via \texttt{valide})
+    \item Aucun attribut supplémentaire : les informations propres à l'annonceur sont portées par
+    les associations \texttt{precise} et \texttt{valide}.
+\end{itemize}
+
+\subsubsection*{4. Entité \texttt{EXPERT}}
+\begin{itemize}
+    \item Spécialisation de \texttt{UTILISATEUR} (justification : seul l'expert peut réaliser une
+    estimation via l'association \texttt{estime})
+    \item Aucun attribut supplémentaire : l'expertise est entièrement capturée par l'entité
+    \texttt{ESTIMATION} qu'il produit.
+\end{itemize}
+
+\subsubsection*{5. Entité \texttt{PRODUIT}}
+\begin{itemize}
+    \item \underline{id\_produit} (clé primaire artificielle)
+    \item \texttt{nom\_produit} (justification : titre de l'annonce visible par les acheteurs)
+    \item \texttt{description} (justification : détails du produit visibles par les acheteurs)
+    \item \texttt{etat} (neuf, bon état, usagé~| justification : information essentielle pour
+    justifier le prix souhaité)
+    \item \texttt{prix\_souhaite} (requis dans l'énoncé : prix cible fixé par l'annonceur au moment
+    de la soumission)
+\end{itemize}
+
+\subsubsection*{6. Entité \texttt{ESTIMATION}}
+\begin{itemize}
+    \item \underline{id\_estimation} (clé primaire artificielle)
+    \item \texttt{prix} (justification : valeur centrale du système — toute proposition d'achat
+    supérieure ou égale à ce montant déclenche la vente automatique)
+    \item L'estimation est modélisée comme une entité à part entière car elle possède ses propres
+    attributs et un cycle de vie indépendant (elle peut être acceptée ou refusée par l'annonceur
+    via \texttt{valide}, avant que le produit soit publié).
+    \item \textbf{Invisibilité :} conformément à l'énoncé, le \texttt{prix} de l'estimation n'est
+    jamais exposé aux acheteurs.
+\end{itemize}
+
+\subsubsection*{7. Entité \texttt{OFFRE}}
+\begin{itemize}
+    \item \underline{id\_offre} (clé primaire artificielle)
+    \item \texttt{prix\_propose} (justification : montant soumis par l'acheteur ; comparé au
+    \texttt{prix} de l'estimation pour déclencher la vente automatique)
+    \item \texttt{date\_proposition} (justification : permet de tracer l'ordre chronologique des
+    offres et d'identifier quelle offre a conclu la vente)
+    \item L'offre est modélisée comme une entité faible car elle n'existe qu'en référence à un
+    acheteur et à un produit ; elle porte cependant ses propres attributs, ce qui justifie une
+    entité plutôt qu'une simple association binaire.
+\end{itemize}
+
+\subsubsection*{8. Association \texttt{precise} (Annonceur $\rightarrow$ Produit)}
+\begin{itemize}
+    \item Cardinalités : \texttt{un} côté \texttt{PRODUIT}, \texttt{plusieurs} côté
+    \texttt{ANNONCEUR}
+    \item Justification : un produit est précisé par exactement un annonceur ; un annonceur peut
+    soumettre plusieurs produits. La clé étrangère \texttt{id\_annonceur} réside dans
+    \texttt{PRODUIT}.
+\end{itemize}
+
+\subsubsection*{9. Association \texttt{estime} (Expert $\rightarrow$ Estimation)}
+\begin{itemize}
+    \item Cardinalités : \texttt{un ou plusieurs} côté \texttt{EXPERT}, \texttt{un} côté
+    \texttt{ESTIMATION}
+    \item Attribut : \texttt{date\_estimation} (justification : traçabilité — permet de savoir
+    quand l'expert a rendu son évaluation)
+    \item Justification : chaque estimation est produite par exactement un expert ; un expert peut
+    réaliser plusieurs estimations au fil du temps.
+\end{itemize}
+
+\subsubsection*{10. Association \texttt{pour} (Estimation $\rightarrow$ Produit)}
+\begin{itemize}
+    \item Cardinalités : \texttt{zéro ou un} côté \texttt{PRODUIT}, \texttt{un} côté
+    \texttt{ESTIMATION}
+    \item Justification : un produit reçoit au plus une estimation (un seul expert est assigné par
+    produit) ; une estimation porte sur exactement un produit.
+\end{itemize}
+
+\subsubsection*{11. Association \texttt{valide} (Annonceur $\rightarrow$ Estimation)}
+\begin{itemize}
+    \item Attribut : \texttt{decision} (acceptée, refusée~| justification : l'annonceur doit
+    explicitement accepter l'estimation avant que le produit soit publié et visible des acheteurs,
+    conformément à l'énoncé)
+    \item Justification : cette association modélise l'étape de validation intermédiaire propre au
+    système de vente conditionnelle. Sans décision \texttt{acceptée}, aucune proposition ne peut
+    être reçue.
+\end{itemize}
+
+\subsubsection*{12. Association \texttt{propose} (Acheteur $\rightarrow$ Offre)}
+\begin{itemize}
+    \item Cardinalités : \texttt{zéro ou plusieurs} côté \texttt{ACHETEUR}, \texttt{un} côté
+    \texttt{OFFRE}
+    \item Justification : un acheteur peut soumettre plusieurs offres sur différents produits ;
+    chaque offre appartient à exactement un acheteur.
+\end{itemize}
+
+\subsubsection*{13. Association \texttt{concerne} (Offre $\rightarrow$ Produit)}
+\begin{itemize}
+    \item Cardinalités : \texttt{zéro ou plusieurs} côté \texttt{PRODUIT}, \texttt{un} côté
+    \texttt{OFFRE}
+    \item Justification : un produit publié peut recevoir plusieurs offres de différents acheteurs ;
+    chaque offre porte sur exactement un produit. La vente est automatiquement conclue lorsqu'une
+    offre atteint ou dépasse le \texttt{prix} de l'estimation acceptée.
+\end{itemize}
+
+\subsubsection*{14. Contraintes d'intégrité}
+\begin{itemize}
+    \item \textbf{Contrainte de publication :} un produit ne peut recevoir d'offres que si
+    l'association \texttt{valide} associée a la \texttt{decision} \texttt{acceptée}.
+    \item \textbf{Contrainte de vente automatique :} dès qu'une offre a un \texttt{prix\_propose}
+    $\geq$ au \texttt{prix} de l'estimation acceptée du produit concerné, la vente est
+    automatiquement conclue.
+    \item \textbf{Contrainte de visibilité :} le \texttt{prix} de l'estimation n'est jamais exposé
+    aux acheteurs ; seul le \texttt{prix\_souhaite} du produit est visible.
+    \item \textbf{Contrainte d'exclusivité expert :} un expert ne peut pas estimer un produit soumis
+    par un annonceur partageant le même compte \texttt{UTILISATEUR} que lui.
+    \item \textbf{Contrainte d'unicité d'estimation :} un même produit ne peut être associé qu'à une
+    seule estimation (cardinalité \texttt{0,1} côté \texttt{PRODUIT} dans l'association
+    \texttt{pour}).
+\end{itemize}
+
+\pagebreak
+\section*{Schéma relationnel}
+Le modèle relationnel correspondant au diagramme Entité/Association est donné par
+la liste de relations suivante :
+\begin{itemize}
+    \item \textbf{UTILISATEUR}(\pk{id}, nom, prenom, courriel, mot\_de\_passe)
+
+    \item \textbf{ACHETEUR}({\fk{id\_utilisateur}})
+
+    \item \textbf{ANNONCEUR}({\fk{id\_utilisateur}})
+
+    \item \textbf{EXPERT}({\fk{id\_utilisateur}})
+
+    \item \textbf{PRODUIT}(\pk{id\_produit}, nom\_produit, description, etat,
+    prix\_souhaite, \fk{id\_annonceur})
+
+    \item \textbf{ESTIMATION}(\pk{id\_estimation}, prix\_estimation, date\_estimation \fk{id\_expert},
+    \fk{id\_produit})
+
+    \item \textbf{VALIDE}({\fk{id\_annonceur}},{\fk{id\_estimation}},
+    decision)
+
+    \item \textbf{OFFRE}(\pk{id\_offre}, prix\_propose, date\_proposition)
+
+        
+    \item \textbf{PROPOSE}(\fk{id\_offre}, \fk{id\_acheteur}, date\_proposition)
+\end{itemize}
+\vspace{0.5cm}
+\noindent
+\textbf{À noter}
+\vspace{0.2cm}
+
+\noindent
+Les conventions suivantes sont utilisées pour la présentation du modèle relationnel :
+les clés primaires sont soulignées, les clés étrangères sont précédées du symbole
+\texttt{\#} et lorsqu'une clé étrangère fait partie d'une clé primaire composée,
+elle est à la fois précédée de \texttt{\#} et soulignée.
+
+\vspace{0.3cm}
+\noindent
+Les entités \textbf{ACHETEUR}, \textbf{ANNONCEUR} et \textbf{EXPERT} sont des
+spécialisations de \textbf{UTILISATEUR} : leur clé primaire est directement la clé
+étrangère vers \textbf{UTILISATEUR}, ce qui garantit qu'aucun doublon d'information
+de base (nom, courriel) n'est stocké.
+L'association \textbf{VALIDE} entre \textbf{ANNONCEUR} et \textbf{ESTIMATION} est
+matérialisée par une table de liaison car elle porte l'attribut \texttt{decision}.
+L'association \textbf{ESTIME} entre \textbf{EXPERT} et \textbf{ESTIMATION} est
+absorbée directement dans \textbf{ESTIMATION} via la clé étrangère
+\texttt{id\_expert}, puisque chaque estimation appartient à exactement un expert.
+De même, l'association \textbf{CONCERNE} entre \textbf{OFFRE} et \textbf{PRODUIT}
+est absorbée dans \textbf{OFFRE} via \texttt{id\_produit}.
+
+\section*{Explication des choix d'implémentations}
+
+% todo
+Pour mettre des extraits de code faire
+\begin{verbatim}
+    SELECT *
+    FROM *
+\end{verbatim}
+
+\section*{Requêtes SQL et résultats attendus}
+
+% todo
+
+\pagebreak
+\section*{Guide d'utilisateur de l'application}
+
+Ce mini-guide suit un utilisateur typique à travers les deux interfaces de l'application : d'abord l'acheteur, puis l'annonceur.
+
+\subsection*{Connexion}
+
+L'application s'ouvre sur un écran de connexion commun à tous les rôles. L'utilisateur entre son courriel et son mot de passe, et l'application détermine automatiquement son rôle (acheteur, annonceur ou expert) pour afficher l'interface appropriée.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{login.png}
+    \caption{Écran de connexion initial.}
+    \label{fig:login}
+\end{figure}
+
+En cas de courriel ou de mot de passe invalide, un message d'erreur informe l'utilisateur sans révéler lequel des deux champs est incorrect (bonne pratique de sécurité).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.3\linewidth]{courriel_invalide.png}
+    \caption{Message d'erreur lorsque les identifiants sont invalides.}
+    \label{fig:courriel-invalide}
+\end{figure}
+
+\subsection*{Interface acheteur}
+
+Une fois connecté avec un compte acheteur, l'utilisateur voit la liste complète des produits dont l'estimation a été validée par leur annonceur. Seuls ces produits sont visibles, conformément à la logique métier.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{acheteur.png}
+    \caption{Page d'accueil acheteur : liste des produits disponibles.}
+    \label{fig:acheteur}
+\end{figure}
+
+L'acheteur peut filtrer la liste par nom de produit...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{recherche_noms.png}
+    \caption{Recherche par nom : les résultats sont filtrés selon la sous-chaîne saisie.}
+    \label{fig:recherche-noms}
+\end{figure}
+
+...ou par fourchette de prix.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{recherche_prix.png}
+    \caption{Recherche par intervalle de prix souhaité.}
+    \label{fig:recherche-prix}
+\end{figure}
+
+Les entrées non numériques dans les champs de prix sont rejetées avec un message d'erreur.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{erreur_prix_invalide.png}
+    \caption{Validation des entrées : un prix non numérique est refusé.}
+    \label{fig:erreur-prix-invalide}
+\end{figure}
+
+Pour faire une offre, l'acheteur sélectionne d'abord une ligne dans le tableau...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{selection_produit.png}
+    \caption{Sélection d'un produit dans la liste.}
+    \label{fig:selection-produit}
+\end{figure}
+
+...puis clique sur le bouton « Faire une offre ».
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{boutton_offre.png}
+    \caption{Bouton « Faire une offre » disponible en bas de l'écran.}
+    \label{fig:bouton-offre}
+\end{figure}
+
+Une fenêtre s'ouvre pour saisir le prix proposé. Si l'offre atteint ou dépasse l'estimation (invisible pour l'acheteur), la vente est automatiquement conclue.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{proposition_offre.png}
+    \caption{Saisie du prix proposé pour le produit sélectionné.}
+    \label{fig:proposition-offre}
+\end{figure}
+
+D'autres cas limites sont également gérés. Une recherche sans résultat retourne une liste vide...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{recherche_nom_existepas.png}
+    \caption{Recherche par nom sans correspondance : aucun résultat affiché.}
+    \label{fig:recherche-nom-inexistant}
+\end{figure}
+
+...et une fourchette de prix incohérente (maximum inférieur au minimum) retourne également une liste vide sans provoquer d'erreur.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{recherche_prix_max<min.png}
+    \caption{Recherche avec un prix maximum inférieur au minimum : aucun résultat.}
+    \label{fig:recherche-prix-incoherent}
+\end{figure}
+
+\subsection*{Interface annonceur}
+
+En se connectant avec un compte annonceur, l'utilisateur accède à un onglet présentant ses produits et leur statut de validation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{annonceur.png}
+    \caption{Onglet « Mes produits » : liste des produits de l'annonceur avec leur statut.}
+    \label{fig:annonceur}
+\end{figure}
+
+L'onglet « Ajouter un produit » permet de soumettre une nouvelle annonce. L'annonceur renseigne le nom, l'état, une description et le prix souhaité.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{ajouter_produit.png}
+    \caption{Formulaire d'ajout d'un nouveau produit.}
+    \label{fig:ajouter-produit}
+\end{figure}
+
+Dès la soumission, un expert (choisi aléatoirement) propose une estimation du prix. C'est le rôle de la fenêtre suivante, qui simule l'intervention de l'expert.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{une_fois_ajoute.png}
+    \caption{Fenêtre d'estimation : l'expert communique son évaluation du prix.}
+    \label{fig:estimation-expert}
+\end{figure}
+
+L'annonceur doit alors décider s'il accepte ou rejette cette estimation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{accepter_estimation.png}
+    \caption{Dialogue de décision : accepter ou refuser l'estimation de l'expert.}
+    \label{fig:accepter-estimation}
+\end{figure}
+
+Dans ce premier scénario, l'annonceur refuse l'estimation : le produit est enregistré avec le statut \texttt{rejete} et ne sera pas visible aux acheteurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{rejetter.png}
+    \caption{Confirmation : l'estimation est rejetée et le produit marqué comme tel.}
+    \label{fig:rejetter}
+\end{figure}
+
+L'annonceur tente l'opération une seconde fois pour un autre produit ; une nouvelle estimation est générée.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{autre_estimation.png}
+    \caption{Nouvelle soumission : l'expert propose une seconde estimation.}
+    \label{fig:autre-estimation}
+\end{figure}
+
+Cette fois, l'annonceur accepte l'estimation.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{accepter.png}
+    \caption{L'annonceur accepte l'estimation de l'expert.}
+    \label{fig:accepter}
+\end{figure}
+
+La liste « Mes produits » se met à jour pour refléter les deux nouveaux produits avec leurs statuts respectifs (\texttt{valide} et \texttt{rejete}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{mes_produits_update.png}
+    \caption{Liste des produits actualisée après les deux soumissions.}
+    \label{fig:mes-produits-update}
+\end{figure}
+
+\subsection*{Gestion des offres reçues et des estimations}
+
+Pour un produit dont le statut est \texttt{valide}, l'annonceur peut consulter les offres reçues via le bouton « Voir offres ».
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{bouton_voiroffres.png}
+    \caption{Fenêtre des offres : prix proposés par les acheteurs, avec marqueur « VENDU » pour les offres atteignant l'estimation.}
+    \label{fig:voir-offres}
+\end{figure}
+
+L'annonceur peut aussi retourner a posteriori sur une estimation encore en attente via le bouton « Valider estimation ». Si aucune estimation n'est en attente pour le produit sélectionné, un message l'indique.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{aucune_estimation.png}
+    \caption{Aucune estimation en attente pour le produit sélectionné.}
+    \label{fig:aucune-estimation}
+\end{figure}
+
+Sinon, la fenêtre de décision s'affiche à nouveau.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{bouton_valider_estimation.png}
+    \caption{Validation différée : décision demandée pour une estimation en attente.}
+    \label{fig:valider-estimation}
+\end{figure}
+
+Selon le choix, le produit bascule en statut \texttt{rejete}...
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{refus.png}
+    \caption{L'estimation en attente est refusée.}
+    \label{fig:refus}
+\end{figure}
+
+...ou en statut \texttt{valide}, ce qui le rend aussitôt visible aux acheteurs.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{accept.png}
+    \caption{L'estimation en attente est acceptée : le produit devient disponible à la vente.}
+    \label{fig:accept}
+\end{figure}
+
+\end{document}

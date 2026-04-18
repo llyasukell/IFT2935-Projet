@@ -69,7 +69,7 @@ insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Paulich',
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('MacGhee', 'Halie', 'hmacghee1v@instagram.com', '$2a$04$/jNV/WTUaiRk3AYYOYy9AuwScRLbB5azJjBwNHOXStQD249xzl.vi');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Laughnan', 'Leoine', 'llaughnan1w@google.nl', '$2a$04$T1QvWax.jsqCpV51YlVJVOAHrKJLPNWa88EM1y7kCWUdOYfVEfCzO');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Oleksinski', 'Gene', 'goleksinski1x@stumbleupon.com', '$2a$04$0gBXSR9uCjDWnweSVsWole9zCHwrrUtETtPZQrdFN5Kvw782NdQ9i');
- 
+
 -- Acheteurs (id 1-40)
 INSERT INTO Acheteur (id_utilisateur) VALUES
 (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),
@@ -167,7 +167,7 @@ insert into Produit (nom_produit, etat, description, prix_souhaite, id_annonceur
 insert into Produit (nom_produit, etat, description, prix_souhaite, id_annonceur) values ('Canon EOS', 'neuf', 'Limited edition', 900.0, 47);
 insert into Produit (nom_produit, etat, description, prix_souhaite, id_annonceur) values ('Ski Rossignol', 'neuf', 'Used once or twice', 600.0, 56);
 insert into Produit (nom_produit, etat, description, prix_souhaite, id_annonceur) values ('MacBook Pro', 'usage', 'Rare find', 1400.0, 53);
- 
+
 -- Estimations
 insert into Estimation (prix_estimation, id_expert, id_produit, date_estimation) values (1192.41, 68, 59, '2025-08-02 09:50:19');
 insert into Estimation (prix_estimation, id_expert, id_produit, date_estimation) values (1245.54, 68, 26, '2025-04-11 00:09:36');
@@ -251,85 +251,55 @@ insert into Estimation (prix_estimation, id_expert, id_produit, date_estimation)
 insert into Estimation (prix_estimation, id_expert, id_produit, date_estimation) values (1104.06, 67, 11, '2025-08-14 20:10:36');
  
 -- Décisions des annonceurs
-insert into Valide (id_annonceur, id_estimation, decision) values (41, 30, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (58, 73, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 11, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 37, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (44, 21, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (52, 4, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (56, 72, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (50, 8, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (57, 2, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (41, 1, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (50, 5, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 5, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (58, 77, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (51, 44, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 76, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (52, 11, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (44, 2, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (60, 9, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (48, 11, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 20, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (44, 54, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (57, 11, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (57, 69, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (54, 76, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (56, 21, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (56, 24, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (50, 23, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 73, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (42, 46, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (53, 17, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (48, 59, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (51, 5, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (48, 47, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (58, 69, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 70, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 11, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 1, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (60, 62, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (50, 46, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (54, 10, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (52, 74, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (44, 79, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (51, 62, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (51, 79, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (57, 28, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 29, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (52, 1, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (55, 2, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (57, 3, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (41, 4, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (54, 5, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (46, 6, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 8, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (44, 9, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (59, 10, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (60, 11, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (41, 15, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 17, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (43, 20, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 21, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (59, 23, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (46, 24, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 25, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (43, 28, 'valide');
 insert into Valide (id_annonceur, id_estimation, decision) values (52, 29, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (52, 71, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (43, 44, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (54, 3, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (60, 76, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 5, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 58, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (45, 67, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (50, 39, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (41, 39, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 15, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 63, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (52, 6, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (56, 34, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (42, 66, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (43, 56, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (43, 75, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 65, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (44, 62, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 30, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 34, 'en_attente');
 insert into Valide (id_annonceur, id_estimation, decision) values (58, 35, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 66, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 58, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (57, 45, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (55, 25, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (49, 4, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (54, 9, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (42, 1, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (43, 43, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (41, 9, 'valide');
-insert into Valide (id_annonceur, id_estimation, decision) values (59, 52, 'rejete');
-insert into Valide (id_annonceur, id_estimation, decision) values (53, 24, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (60, 71, 'en_attente');
-insert into Valide (id_annonceur, id_estimation, decision) values (47, 75, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (53, 37, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (46, 39, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (50, 43, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (53, 44, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (42, 45, 'rejete');
+insert into Valide (id_annonceur, id_estimation, decision) values (56, 46, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (41, 47, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (55, 52, 'rejete');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 54, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (59, 56, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (48, 58, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (42, 59, 'rejete');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 62, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (44, 63, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 65, 'rejete');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 66, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 67, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (51, 69, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (58, 70, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (42, 71, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (47, 72, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (55, 73, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 74, 'rejete');
+insert into Valide (id_annonceur, id_estimation, decision) values (49, 75, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (46, 76, 'valide');
+insert into Valide (id_annonceur, id_estimation, decision) values (53, 77, 'en_attente');
+insert into Valide (id_annonceur, id_estimation, decision) values (59, 79, 'valide');
  
 -- Offres
 insert into Offre (prix_propose, id_produit) values (415.71, 30);
