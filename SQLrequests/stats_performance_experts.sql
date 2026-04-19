@@ -8,7 +8,7 @@ JOIN Produit ON Estimation.id_produit = Produit.id_produit
 JOIN Valide ON Estimation.id_estimation = Valide.id_estimation
 WHERE Valide.decision = 'valide'
 GROUP BY U_Expert.nom, U_Expert.prenom
-HAVING COUNT(Estimation.id_estimation) > 1;
+HAVING COUNT(Estimation.id_estimation) > 1
 ORDER BY total_estime DESC;
 
 END TRANSACTION
