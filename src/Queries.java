@@ -1,5 +1,7 @@
 public class Queries {
 
+    // --- AUTHENTIFICATION ET UTILISATEURS ---
+    // Source: get_user_by_email.sql
     public static final String FIND_USER_BY_EMAIL =
         "SELECT id, nom, prenom, courriel, mot_de_passe FROM Utilisateur WHERE courriel = ?";
 
@@ -12,18 +14,40 @@ public class Queries {
     public static final String IS_EXPERT =
         "SELECT 1 FROM Expert WHERE id_utilisateur = ?";
 
+
+    // --- GESTION DES PRODUITS (Annonceur & Recherche) ---
+    // Source: get_products_by_seller.sql
     public static final String PRODUITS_DE_ANNONCEUR =
-        "SELECT p.id_produit, p.nom_produit, p.etat, p.prix_souhaite, " +
-        "       COALESCE(v.decision::text, 'en_attente') AS statut " +
-        "FROM Produit p " +
-        "LEFT JOIN Estimation e ON e.id_produit = p.id_produit " +
-        "LEFT JOIN Valide v ON v.id_estimation = e.id_estimation " +
-        "WHERE p.id_annonceur = ?";
+        "SELECT Produit.*, Utilisateur.nom, Utilisateur.prenom FROM Produit " +
+        "JOIN Annonceur ON Produit.id_annonceur = Annonceur.id_utilisateur " +
+        "JOIN Utilisateur ON Annonceur.id_utilisateur = Utilisateur.id " +
+        "WHERE Produit.id_annonceur = ?";
 
     public static final String INSERT_PRODUIT =
         "INSERT INTO Produit (nom_produit, etat, description, prix_souhaite, id_annonceur) " +
         "VALUES (?, ?::etat_produit, ?, ?, ?) RETURNING id_produit";
 
+    // Source: search_productName.sql
+    public static final String SEARCH_PRODUIT_NOM =
+        "SELECT * FROM Produit WHERE nom_produit LIKE CONCAT('%', ?, '%')";
+
+    // Source: search_by_description.sql
+    public static final String SEARCH_PRODUIT_DESCRIPTION =
+        "SELECT * FROM Produit WHERE description LIKE CONCAT('%', ?, '%')";
+
+    // Source: between_prices.sql
+    public static final String SEARCH_PRODUIT_ENTRE_PRIX =
+        "SELECT * FROM Produit WHERE prix_souhaite BETWEEN ? AND ?";
+
+    // Source: get_products_by_state.sql
+    public static final String GET_PRODUITS_PAR_ETAT =
+        "SELECT Produit.*, Utilisateur.nom, Utilisateur.prenom FROM Produit " +
+        "JOIN Annonceur ON Produit.id_annonceur = Annonceur.id_utilisateur " +
+        "JOIN Utilisateur ON Annonceur.id_utilisateur = Utilisateur.id " +
+        "WHERE Produit.etat = ?";
+
+
+    // --- ESTIMATIONS ET EXPERTS ---
     public static final String RANDOM_EXPERT =
         "SELECT id_utilisateur FROM Expert ORDER BY random() LIMIT 1";
 
@@ -39,56 +63,96 @@ public class Queries {
         "UPDATE Valide SET decision = ?::etat_decision " +
         "WHERE id_annonceur = ? AND id_estimation = ?";
 
-    public static final String ESTIMATION_EN_ATTENTE =
-        "SELECT e.id_estimation FROM Estimation e " +
-        "JOIN Valide v ON v.id_estimation = e.id_estimation " +
-        "WHERE e.id_produit = ? AND v.id_annonceur = ? AND v.decision = 'en_attente' " +
-        "ORDER BY e.date_estimation DESC LIMIT 1";
+    // Source: get_estimates_on_product.sql
+    public static final String TOUTES_ESTIMATIONS_PRODUIT =
+        "SELECT Estimation.*, Utilisateur.nom, Utilisateur.prenom, Valide.decision " +
+        "FROM Estimation JOIN Expert ON Estimation.id_expert = Expert.id_utilisateur " +
+        "JOIN Utilisateur ON Expert.id_utilisateur = Utilisateur.id " +
+        "LEFT JOIN Valide ON Estimation.id_estimation = Valide.id_estimation " +
+        "WHERE Estimation.id_produit = ?";
 
-    public static final String OFFRES_DU_PRODUIT =
-        "SELECT o.id_offre, o.prix_propose, u.courriel, " +
-        "       (SELECT prix_estimation FROM Estimation e " +
-        "         WHERE e.id_produit = o.id_produit " +
-        "         ORDER BY e.date_estimation DESC LIMIT 1) AS prix_estimation " +
-        "FROM Offre o " +
-        "JOIN propose pr ON pr.id_offre = o.id_offre " +
-        "JOIN Utilisateur u ON u.id = pr.id_utilisateur " +
-        "WHERE o.id_produit = ?";
+    // Source: get_VALID_estimates_on_product.sql
+    public static final String ESTIMATIONS_VALIDEES_PRODUIT =
+        "SELECT Estimation.*, Utilisateur.nom, Utilisateur.prenom " +
+        "FROM Estimation JOIN Expert ON Estimation.id_expert = Expert.id_utilisateur " +
+        "JOIN Utilisateur ON Expert.id_utilisateur = Utilisateur.id " +
+        "JOIN Valide ON Estimation.id_estimation = Valide.id_estimation " +
+        "WHERE Estimation.id_produit = ? AND Valide.decision = 'valide'";
 
-    public static final String PRODUITS_VALIDES_POUR_ACHETEUR =
-        "SELECT p.id_produit, p.nom_produit, p.etat, p.description, p.prix_souhaite " +
-        "FROM Produit p " +
-        "JOIN Estimation e ON e.id_produit = p.id_produit " +
-        "JOIN Valide v ON v.id_estimation = e.id_estimation " +
-        "WHERE v.decision = 'valide'";
 
-    public static final String SEARCH_PRODUIT_NOM =
-        "SELECT p.id_produit, p.nom_produit, p.etat, p.description, p.prix_souhaite " +
-        "FROM Produit p " +
-        "JOIN Estimation e ON e.id_produit = p.id_produit " +
-        "JOIN Valide v ON v.id_estimation = e.id_estimation " +
-        "WHERE v.decision = 'valide' AND p.nom_produit LIKE CONCAT('%', ?, '%')";
-
-    public static final String SEARCH_PRODUIT_ENTRE_PRIX =
-        "SELECT p.id_produit, p.nom_produit, p.etat, p.description, p.prix_souhaite " +
-        "FROM Produit p " +
-        "JOIN Estimation e ON e.id_produit = p.id_produit " +
-        "JOIN Valide v ON v.id_estimation = e.id_estimation " +
-        "WHERE v.decision = 'valide' AND p.prix_souhaite BETWEEN ? AND ?";
-
+    // --- OFFRES ET VENTES ---
     public static final String INSERT_OFFRE =
         "INSERT INTO Offre (prix_propose, id_produit) VALUES (?, ?) RETURNING id_offre";
 
     public static final String INSERT_PROPOSE =
         "INSERT INTO propose (id_offre, id_utilisateur) VALUES (?, ?)";
 
+    // Source: get_offers_on_product.sql
+    public static final String OFFRES_SUR_PRODUIT =
+        "SELECT Offre.*, Utilisateur.nom, Utilisateur.prenom, propose.date_proposition " +
+        "FROM Offre JOIN propose ON Offre.id_offre = propose.id_offre " +
+        "JOIN Acheteur ON propose.id_utilisateur = Acheteur.id_utilisateur " +
+        "JOIN Utilisateur ON Acheteur.id_utilisateur = Utilisateur.id " +
+        "WHERE Offre.id_produit = ?";
+
+    // Source: viewFullOfferInfo.sql
+    public static final String INFO_COMPLETE_OFFRE =
+        "SELECT Offre.*, Produit.nom_produit, Produit.description, Produit.etat, Produit.prix_souhaite, " +
+        "U_Acheteur.nom AS acheteur_nom, U_Acheteur.prenom AS acheteur_prenom, " +
+        "U_Annonceur.nom AS annonceur_nom, U_Annonceur.prenom AS annonceur_prenom, propose.date_proposition " +
+        "FROM Offre JOIN Produit ON Offre.id_produit = Produit.id_produit " +
+        "JOIN Annonceur ON Produit.id_annonceur = Annonceur.id_utilisateur " +
+        "JOIN Utilisateur U_Annonceur ON Annonceur.id_utilisateur = U_Annonceur.id " +
+        "JOIN propose ON Offre.id_offre = propose.id_offre " +
+        "JOIN Acheteur ON propose.id_utilisateur = Acheteur.id_utilisateur " +
+        "JOIN Utilisateur U_Acheteur ON Acheteur.id_utilisateur = U_Acheteur.id " +
+        "WHERE Offre.id_offre = ?";
+
+    // Source: vente_conclu.sql
     public static final String VENTE_CONCLU =
         "SELECT CASE " +
-        "         WHEN e.prix_estimation IS NULL THEN 'PENDING' " +
-        "         WHEN ? >= e.prix_estimation THEN 'ACCEPT' " +
-        "         ELSE 'REFUSE' " +
-        "       END AS decision " +
-        "FROM Produit p " +
-        "LEFT JOIN Estimation e ON e.id_produit = p.id_produit " +
-        "WHERE p.id_produit = ?";
+        "WHEN prix_souhaite IS NOT NULL AND ? < prix_souhaite THEN 'REFUSE' " +
+        "WHEN prix_souhaite IS NOT NULL AND ? >= prix_souhaite THEN 'ACCEPT' " +
+        "ELSE 'PENDING' END AS decision FROM Produit WHERE id_produit = ?";
+
+
+    // --- ANALYSE ET STATISTIQUES ---
+    // Source: stats_performance_experts.sql
+    public static final String STATS_EXPERTS =
+        "SELECT U_Expert.nom, U_Expert.prenom, Sum(Estimation.prix_estimation) AS total_estime, " +
+        "COUNT(Estimation.id_estimation) AS nb_estimation " +
+        "FROM Expert JOIN Utilisateur AS U_Expert ON Expert.id_utilisateur = U_Expert.id " +
+        "JOIN Estimation ON U_Expert.id_utilisateur = Estimation.id_expert " +
+        "JOIN Valide ON Estimation.id_estimation = Valide.id_estimation " +
+        "WHERE Valide.decision = 'valide' GROUP BY U_Expert.nom, U_Expert.prenom " +
+        "HAVING COUNT(Estimation.id_estimation) > 1 ORDER BY total_estime DESC";
+
+    // Source: consultation_prix_valides.sql
+    public static final String LISTE_PRIX_OFFICIELS =
+        "SELECT U_Annonceur.nom AS nom_annonceur, Produit.nom_produit, U_Expert.nom AS nom_expert, " +
+        "Estimation.prix_estimation FROM Annonceur " +
+        "JOIN Utilisateur U_Annonceur ON Annonceur.id_utilisateur = U_Annonceur.id " +
+        "JOIN Produit ON Annonceur.id_utilisateur = Produit.id_annonceur " +
+        "JOIN Estimation ON Estimation.id_produit = Produit.id_produit " +
+        "JOIN Expert ON Estimation.id_expert = Expert.id_utilisateur " +
+        "JOIN Utilisateur U_Expert ON Expert.id_utilisateur = U_Expert.id " +
+        "JOIN Valide ON Valide.id_estimation = Estimation.id_estimation " +
+        "WHERE Valide.decision = 'valide'";
+
+    // Source: get_products_without_offers.sql
+    public static final String PRODUITS_SANS_OFFRES =
+        "SELECT Produit.*, Utilisateur.nom, Utilisateur.prenom FROM Produit " +
+        "JOIN Annonceur ON Produit.id_annonceur = Annonceur.id_utilisateur " +
+        "JOIN Utilisateur ON Annonceur.id_utilisateur = Utilisateur.id " +
+        "WHERE NOT EXISTS (SELECT 1 FROM Offre WHERE Offre.id_produit = Produit.id_produit)";
+
+    // Source: get_recent_offers.sql
+    public static final String OFFRES_RECENTES =
+        "SELECT Offre.*, Produit.nom_produit, Utilisateur.nom, Utilisateur.prenom, propose.date_proposition " +
+        "FROM Offre JOIN propose ON Offre.id_offre = propose.id_offre " +
+        "JOIN Acheteur ON propose.id_utilisateur = Acheteur.id_utilisateur " +
+        "JOIN Utilisateur ON Acheteur.id_utilisateur = Utilisateur.id " +
+        "JOIN Produit ON Offre.id_produit = Produit.id_produit " +
+        "WHERE propose.date_proposition >= CURRENT_DATE - INTERVAL '30 days' " +
+        "ORDER BY propose.date_proposition DESC";
 }
