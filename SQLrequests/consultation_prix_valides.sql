@@ -1,5 +1,6 @@
 BEGIN TRANSACTION;
-
+--Cette requête sort la liste des prix officiels 
+--on voit quel annonceur a quel produit, quel expert a fait l'estimation, et on affiche seulement si le prix a été validé.
 SELECT U_Annonceur.nom AS nom_annonceur,
 Produit.nom_produit,
 U_Expert.nom AS nom_expert,

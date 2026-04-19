@@ -1,5 +1,5 @@
 BEGIN TRANSACTION
-
+-- les experts les plus productifs : on calcule leur montant total d'estimations et leur nombre d'interventions
 SELECT U_Expert.nom, U_Expert.prenom, Sum(Estimation.prix_estimation) AS total_estime, COUNT(Estimation.id_estimation) AS nb_estimation
 FROM Expert
 JOIN Utilisateur AS U_Expert ON Expert.id_utilisateur = U_Expert.id

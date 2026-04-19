@@ -5,6 +5,6 @@ SELECT Estimation.*, Utilisateur.nom, Utilisateur.prenom, Valide.decision
 FROM Estimation
 JOIN Expert ON Estimation.id_expert = Expert.id_utilisateur
 JOIN Utilisateur ON Expert.id_utilisateur = Utilisateur.id
-JOIN Valide ON Estimation.id_estimation = Valide.id_estimation
+LEFT JOIN Valide ON Estimation.id_estimation = Valide.id_estimation
 WHERE Estimation.id_produit = ?;
 END TRANSACTION;
