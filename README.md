@@ -40,7 +40,6 @@ Comptes de test:
 
 Une fois l'application lancée, on peut utiliser les comptes suivants pré-configurés dans le fichier LMD.sql :
 
-Rôle,Courriel,Mot de passe
-Acheteur,prof.acheteur@test.com,test
-Annonceur,prof.annonceur@test.com,test
+Acheteur : prof.acheteur@test.com     mot de passe :"test"
+Annonceur: prof.annonceur@test.com    mot de passe :"test"
 
