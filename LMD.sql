@@ -1,10 +1,9 @@
 -- Utilisateurs (70 au total : 40 acheteurs, 20 annonceurs, 10 experts)
 
--- Compte de test pour le professeur
-insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Professeur', 'Test', 'test@email.com', 'test');
-
 -- Suite des utilisateurs avec mot de passe '123'
-insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Coupar', 'Pate', 'pcoupar0@illinois.edu', '123');
+
+-- Acheteur
+insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Professeur', 'Acheteur', 'prof.acheteur@test.com', 'test');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Peiser', 'Rodolphe', 'rpeiser1@mediafire.com', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Huxter', 'Mahmud', 'mhuxter2@google.com', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Sebastian', 'Brendan', 'bsebastian3@dropbox.com', '123');
@@ -44,7 +43,10 @@ insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Estrella'
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Itzhak', 'Jimmie', 'jitzhak11@gravatar.com', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Folland', 'Ximenes', 'xfolland12@sina.com.cn', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Fulker', 'Dinny', 'dfulker13@delicious.com', '123');
-insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Bartlam', 'Tannie', 'tbartlam14@dailymotion.com', '123');
+
+
+-- Annonceur
+insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Professeur', 'Annonceur', 'prof.annonceur@test.com', 'test');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Bloxsome', 'Heindrick', 'hbloxsome15@desdev.cn', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Siddens', 'Page', 'psiddens16@java.com', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Varah', 'Clarinda', 'cvarah17@naver.com', '123');
@@ -64,7 +66,9 @@ insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Angric', 
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Yanyshev', 'Theresa', 'tyanyshev1l@mit.edu', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Raddin', 'Sonja', 'sraddin1m@ucoz.ru', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Karlowicz', 'Brunhilda', 'bkarlowicz1n@umich.edu', '123');
-insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Napper', 'Ike', 'inapper1o@prlog.org', '123');
+
+-- Expert
+insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Xavier', 'Souli', 'souli.Xavier@nas.com', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Scothern', 'Vicky', 'vscothern1p@nsw.gov.au', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Levett', 'Kellsie', 'klevett1q@amazon.co.uk', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Bernhardsson', 'Germayne', 'gbernhardsson1r@prweb.com', '123');
