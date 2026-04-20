@@ -243,7 +243,8 @@ public class AcheteurGUI extends JFrame {
     private boolean venteConclue(Connection c, BigDecimal prix, int idProduit) throws SQLException {
         try (PreparedStatement ps = c.prepareStatement(Queries.VENTE_CONCLU)) {
             ps.setBigDecimal(1, prix);
-            ps.setInt(2, idProduit);
+            ps.setBigDecimal(2, prix);
+            ps.setInt(3, idProduit);
             try (ResultSet rs = ps.executeQuery()) {
                 if (!rs.next()) return false;
                 return "ACCEPT".equals(rs.getString(1));

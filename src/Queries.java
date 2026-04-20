@@ -23,6 +23,13 @@ public class Queries {
         "JOIN Utilisateur ON Annonceur.id_utilisateur = Utilisateur.id " +
         "WHERE Produit.id_annonceur = ?";
 
+    // Source: get_valid_products_for_buyer.sql
+    public static final String PRODUITS_VALIDES_POUR_ACHETEUR =
+        "SELECT DISTINCT Produit.* FROM Produit " +
+        "JOIN Estimation ON Estimation.id_produit = Produit.id_produit " +
+        "JOIN Valide ON Valide.id_estimation = Estimation.id_estimation " +
+        "WHERE Valide.decision = 'valide'";
+
     public static final String INSERT_PRODUIT =
         "INSERT INTO Produit (nom_produit, etat, description, prix_souhaite, id_annonceur) " +
         "VALUES (?, ?::etat_produit, ?, ?, ?) RETURNING id_produit";
@@ -62,6 +69,13 @@ public class Queries {
     public static final String UPDATE_VALIDE_DECISION =
         "UPDATE Valide SET decision = ?::etat_decision " +
         "WHERE id_annonceur = ? AND id_estimation = ?";
+
+    // Source: get_pending_estimation.sql
+    public static final String ESTIMATION_EN_ATTENTE =
+        "SELECT Estimation.id_estimation FROM Estimation " +
+        "JOIN Valide ON Valide.id_estimation = Estimation.id_estimation " +
+        "WHERE Estimation.id_produit = ? AND Valide.id_annonceur = ? " +
+        "AND Valide.decision = 'en_attente' LIMIT 1";
 
     // Source: get_estimates_on_product.sql
     public static final String TOUTES_ESTIMATIONS_PRODUIT =

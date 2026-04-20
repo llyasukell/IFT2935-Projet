@@ -246,7 +246,7 @@ public class AnnonceurGUI extends JFrame {
 
         JTable table = new JTable();
         try (Connection c = Db.getConnection();
-             PreparedStatement ps = c.prepareStatement(Queries.OFFRES_DU_PRODUIT)) {
+             PreparedStatement ps = c.prepareStatement(Queries.OFFRES_SUR_PRODUIT)) {
             ps.setInt(1, idProduit);
             try (ResultSet rs = ps.executeQuery()) {
                 Tables.fillTable(table, rs);
