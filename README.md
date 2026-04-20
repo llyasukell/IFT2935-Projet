@@ -10,7 +10,7 @@ On doit renommer le fichier db.properties.example en db.properties à la racine 
 Ensuite, on modifie les valeurs pour qu'elles correspondent à l'environnement local :
 Properties
 
-# Format : jdbc:postgresql://[HÔTE]:[PORT]/[NOM_DE_LA_BD]
+Format : jdbc:postgresql://[HÔTE]:[PORT]/[NOM_DE_LA_BD]
 
 db.properties =
 
@@ -39,8 +39,8 @@ Depuis la racine du projet :
 Comptes de test:
 
 Une fois l'application lancée, on peut utiliser les comptes suivants pré-configurés dans le fichier LMD.sql :
-Rôle	       Courriel	            Mot de passe
-Acheteur	prof.acheteur@test.com	 test
-Annonceur	prof.annonceur@test.com	 test
 
+Rôle,Courriel,Mot de passe
+Acheteur,prof.acheteur@test.com,test
+Annonceur,prof.annonceur@test.com,test
 
