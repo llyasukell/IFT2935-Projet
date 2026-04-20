@@ -1,8 +1,5 @@
 -- Utilisateurs (70 au total : 40 acheteurs, 20 annonceurs, 10 experts)
 
--- Compte de test pour le professeur
-insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Professeur', 'Test', 'test@email.com', 'test');
-
 -- Suite des utilisateurs avec mot de passe '123'
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Coupar', 'Pate', 'pcoupar0@illinois.edu', '123');
 insert into Utilisateur (nom, prenom, courriel, mot_de_passe) values ('Peiser', 'Rodolphe', 'rpeiser1@mediafire.com', '123');
